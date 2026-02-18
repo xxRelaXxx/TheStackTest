@@ -1,0 +1,30 @@
+<div class="shop-container">
+  <div class="shop-header">
+    <h1>SHOP</h1>
+  </div>
+  
+  <!-- Products Grid -->
+  <div class="products-grid">
+    @for (product of filteredProducts(); track product.id; let idx = $index) {
+      <div class="product-card">
+        <div class="product-inner" [attr.data-color]="idx % 3">
+          <div class="product-image">
+            <img [src]="product.immagine" [alt]="product.nome" />
+          </div>
+          <div class="product-info">
+            <h3>{{ product.nome }}</h3>
+            <p class="product-description">{{ product.descrizione }} — €{{ product.prezzo }}</p>
+            <a 
+              [href]="product.amazonUrl" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              class="buy-btn"
+            >
+              aggiungi
+            </a>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+</div>

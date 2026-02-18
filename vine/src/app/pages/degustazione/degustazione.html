@@ -1,0 +1,148 @@
+<div class="degustazione-container">
+  <div class="page-header">
+    <h1>Degustazione</h1>
+    <p class="subtitle">lorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsum</p>
+  </div>
+  
+  @if (!submitted()) {
+    <div class="booking-card">
+      <h2>Prenota ora una Degustazione</h2>
+      
+      <form [formGroup]="bookingForm" (ngSubmit)="onSubmit()" class="booking-form">
+        <!-- Radio button types -->
+        <div class="form-group radio-group">
+          <label class="radio-label">
+            <input 
+              type="radio" 
+              formControlName="tipologia"
+              value="1"
+            />
+            <span>Tipologia 1</span>
+          </label>
+          <label class="radio-label">
+            <input 
+              type="radio" 
+              formControlName="tipologia"
+              value="2"
+            />
+            <span>Tipologia 2</span>
+          </label>
+          <label class="radio-label">
+            <input 
+              type="radio" 
+              formControlName="tipologia"
+              value="3"
+            />
+            <span>Tipologia 3</span>
+          </label>
+        </div>
+        
+        <!-- Single-month calendar with controls -->
+        <div class="calendar-section">
+          <div class="calendar-controls">
+            <button type="button" class="calendar-nav" (click)="prevMonth()" [disabled]="currentMonthIndex() === 0">‹</button>
+            <div class="calendar-title">{{ visibleMonth().name }}</div>
+            <button type="button" class="calendar-nav" (click)="nextMonth()" [disabled]="currentMonthIndex() === displayMonths.length - 1">›</button>
+          </div>
+
+          <div class="calendar-wrapper">
+            <div class="calendar-grid">
+              <div class="day-header">S</div>
+              <div class="day-header">M</div>
+              <div class="day-header">T</div>
+              <div class="day-header">W</div>
+              <div class="day-header">T</div>
+              <div class="day-header">F</div>
+              <div class="day-header">S</div>
+
+              @for (day of visibleMonth().days; track day.date) {
+                @if (day.date) {
+                  <button 
+                    type="button"
+                    class="calendar-day"
+                    [class.selected]="isDateSelected(day.date)"
+                    (click)="selectDate(day.date)"
+                    aria-label="Seleziona {{ day.day }} {{ visibleMonth().name }}"
+                  >
+                    <span class="day-number">{{ day.day }}</span>
+                  </button>
+                } @else {
+                  <div class="calendar-day empty"></div>
+                }
+              }
+            </div>
+          </div>
+        </div>
+        
+        <!-- Form fields -->
+        <div class="form-group">
+          <label for="orario">Orario</label>
+          <input 
+            type="time" 
+            id="orario" 
+            formControlName="orario"
+            required
+          />
+        </div>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label for="nome">Nome e Cognome</label>
+            <input 
+              type="text" 
+              id="nome" 
+              formControlName="nome"
+              placeholder="Nome Cognome"
+              required
+            />
+          </div>
+          
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input 
+              type="email" 
+              id="email" 
+              formControlName="email"
+              placeholder="email@example.com"
+              required
+            />
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="telefono">Num Telefono</label>
+          <input 
+            type="tel" 
+            id="telefono" 
+            formControlName="telefono"
+            placeholder="+39 XXX XXX XXXX"
+            required
+          />
+        </div>
+        
+        <div class="form-group">
+          <label for="messaggio">Note</label>
+          <textarea 
+            id="messaggio" 
+            formControlName="messaggio"
+            rows="4"
+            placeholder="Eventuali note aggiuntive..."
+          ></textarea>
+        </div>
+        
+        <button 
+          type="submit" 
+          class="submit-btn"
+          [disabled]="!bookingForm.valid || !selectedDate()"
+        >
+          Prenota
+        </button>
+      </form>
+    </div>
+  } @else {
+    <div class="success-message">
+      <h2>Prenotazione Confermata!</h2>
+      <p>Grazie per la tua prenotazione. Riceverai una conferma via email a breve.</p>
+    </div>
+  }
+</div>

@@ -1,0 +1,101 @@
+<div class="home-container">
+  <!-- Hero Section with Parallax -->
+  <section class="hero-section">
+    <div class="hero-left">
+      <div 
+        class="vine-frame-container"
+        [style.transform]="'translate(' + parallaxX() + 'px, ' + parallaxY() + 'px)'"
+      >
+        <img src="/images/vine-frame.png" alt="Vine Frame" class="vine-frame" />
+        <div class="frame-content">
+          <img src="/images/vineyard-bottle.png" alt="Vineyard with Bottle" class="vineyard-image" />
+        </div>
+      </div>
+    </div>
+    <div class="hero-right">
+      <h1>Podere Sopra la Ripa</h1>
+      <p class="hero-text">
+        lorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsum
+      </p>
+    </div>
+  </section>
+  
+  <!-- Section 2: Experiences -->
+  <section class="experiences-section">
+    <!-- Experience 1: Degustazione -->
+    <div class="experience-row">
+      <div class="experience-image-container">
+        <img src="/images/cypress-trees.png" alt="Degustazione" />
+      </div>
+      <div class="experience-text-container">
+        <h2>VIENI A FARE DEGUSTAZIONI DA NOI</h2>
+        <p>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore.
+        </p>
+        <button 
+          class="cta-btn"
+          (click)="navigateToContact({degustazione: 'true'})"
+        >
+          CONTATTACI
+        </button>
+      </div>
+    </div>
+    
+    <!-- Experience 2: Vini in Italia -->
+    <div class="experience-row reverse">
+      <div class="experience-image-container">
+        <img src="/images/vineyard-landscape.png" alt="Vineyard" />
+      </div>
+      <div class="experience-text-container">
+        <h2>UNO TRA I VINI PIU BUONI IN ITALIA</h2>
+        <p>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore.
+        </p>
+        <button 
+          class="cta-btn"
+          (click)="router.navigate(['/shop'])"
+        >
+          VIENI IN NEGOZIO
+        </button>
+      </div>
+    </div>
+    
+    <!-- Experience 3: Notte -->
+    <div class="experience-row">
+      <div class="experience-image-container">
+        <img src="/images/agriturismo-building.png" alt="Agriturismo" />
+      </div>
+      <div class="experience-text-container">
+        <h2>VIENI A FARE UNA NOTTE DA NOI</h2>
+        <p>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore.
+        </p>
+        <button 
+          class="cta-btn"
+          (click)="navigateToContact({degustazione: 'true', notteConNoi: 'true'})"
+        >
+          CONTATTACI
+        </button>
+      </div>
+    </div>
+    
+    <!-- Experience 4: Tomba Etrusca -->
+    <div class="experience-row reverse">
+      <div class="experience-image-container">
+        <img src="/images/etruscan-tomb.png" alt="Tomba Etrusca" />
+      </div>
+      <div class="experience-text-container">
+        <h2>VISITA ALLA NECROPOLI ETRUSCA</h2>
+        <p>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore.
+        </p>
+        <button 
+          class="cta-btn"
+          (click)="navigateToContact({visitaTomba: 'true'})"
+        >
+          CONTATTACI PER VISITARLA
+        </button>
+      </div>
+    </div>
+  </section>
+</div>

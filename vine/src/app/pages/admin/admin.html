@@ -1,0 +1,336 @@
+<div class="admin-container">
+  <div class="admin-header">
+    <h1>Gestionale Prenotazioni</h1>
+    <p class="subtitle">Sistema di gestione per le degustazioni</p>
+  </div>
+  
+  <!-- Tabs Navigation -->
+  <div class="tabs-navigation">
+    <button 
+      [class]="activeTab() === 'new' ? 'tab-btn active' : 'tab-btn'"
+      (click)="selectTab('new')"
+    >
+      <span class="badge">{{ newBookings().length }}</span>
+      Nuove Prenotazioni
+    </button>
+    <button 
+      [class]="activeTab() === 'confirmed' ? 'tab-btn active' : 'tab-btn'"
+      (click)="selectTab('confirmed')"
+    >
+      <span class="badge confirmed">{{ confirmedBookings().length }}</span>
+      Prenotazioni Confermate
+    </button>
+    <button 
+      [class]="activeTab() === 'archived' ? 'tab-btn active' : 'tab-btn'"
+      (click)="selectTab('archived')"
+    >
+      <span class="badge archived">{{ archivedBookings().length }}</span>
+      Prenotazioni Archiviate
+    </button>
+      <button
+        [class]="activeTab() === 'richieste' ? 'tab-btn active' : 'tab-btn'"
+        (click)="selectTab('richieste')"
+      >
+        <span class="badge">{{ contactRequests().length }}</span>
+        Richieste Contatto
+      </button>
+  </div>
+  
+  <!-- New Bookings Tab -->
+  @if (activeTab() === 'new') {
+    <div class="tab-content">
+      <h2>Nuove Prenotazioni</h2>
+      @if (newBookings().length > 0) {
+        <div class="bookings-list">
+          @for (booking of newBookings(); track booking.id) {
+            <div class="booking-card new">
+              <div class="booking-header">
+                <div class="booking-status">
+                  <span class="status-badge new">Nuova</span>
+                  <span class="booking-id">ID: {{ booking.id }}</span>
+                </div>
+                <div class="booking-date-created">
+                  Ricevuta: {{ formatDateTime(booking.createdAt) }}
+                </div>
+              </div>
+              
+              <div class="booking-info">
+                <div class="info-row">
+                  <div class="info-item">
+                    <strong>Cliente:</strong>
+                    <span>{{ booking.nome }} {{ booking.cognome }}</span>
+                  </div>
+                  <div class="info-item">
+                    <strong>Data richiesta:</strong>
+                    <span class="highlight">{{ formatDate(booking.data) }}</span>
+                  </div>
+                </div>
+                
+                <div class="info-row">
+                  <div class="info-item">
+                    <strong>Email:</strong>
+                    <a [href]="'mailto:' + booking.email">{{ booking.email }}</a>
+                  </div>
+                  <div class="info-item">
+                    <strong>Telefono:</strong>
+                    <a [href]="'tel:' + booking.telefono">{{ booking.telefono }}</a>
+                  </div>
+                </div>
+                
+                <div class="info-row">
+                  <div class="info-item">
+                    <strong>Numero persone:</strong>
+                    <span>{{ booking.numeroPersone }}</span>
+                  </div>
+                  <div class="info-item full-width">
+                    <strong>Tipo prenotazione:</strong>
+                    <div class="tipo-tags">
+                      @for (tipo of booking.tipoPrenotazione; track tipo) {
+                        <span class="tipo-tag">{{ tipo }}</span>
+                      }
+                    </div>
+                  </div>
+                </div>
+                
+                @if (booking.messaggio) {
+                  <div class="info-item full-width">
+                    <strong>Messaggio:</strong>
+                    <p class="message">{{ booking.messaggio }}</p>
+                  </div>
+                }
+              </div>
+              
+              <div class="booking-actions">
+                <button 
+                  class="action-btn confirm"
+                  (click)="confirmBooking(booking.id)"
+                >
+                  ✓ Conferma
+                </button>
+                <button 
+                  class="action-btn reject"
+                  (click)="rejectBooking(booking.id)"
+                >
+                  ✗ Rifiuta
+                </button>
+              </div>
+            </div>
+          }
+        </div>
+      } @else {
+        <div class="empty-state">
+          <p>Non ci sono nuove prenotazioni al momento.</p>
+        </div>
+      }
+    </div>
+  }
+  
+  <!-- Confirmed Bookings Tab -->
+  @if (activeTab() === 'confirmed') {
+    <div class="tab-content">
+      <h2>Prenotazioni Confermate</h2>
+      @if (confirmedBookings().length > 0) {
+        <div class="bookings-list">
+          @for (booking of confirmedBookings(); track booking.id) {
+            <div class="booking-card confirmed">
+              <div class="booking-header">
+                <div class="booking-status">
+                  <span class="status-badge confirmed">Confermata</span>
+                  <span class="booking-id">ID: {{ booking.id }}</span>
+                </div>
+                <div class="booking-date-created">
+                  Confermata il: {{ formatDateTime(booking.createdAt) }}
+                </div>
+              </div>
+              
+              <div class="booking-info">
+                <div class="info-row">
+                  <div class="info-item">
+                    <strong>Cliente:</strong>
+                    <span>{{ booking.nome }} {{ booking.cognome }}</span>
+                  </div>
+                  <div class="info-item">
+                    <strong>Data:</strong>
+                    <span class="highlight">{{ formatDate(booking.data) }}</span>
+                  </div>
+                </div>
+                
+                <div class="info-row">
+                  <div class="info-item">
+                    <strong>Email:</strong>
+                    <a [href]="'mailto:' + booking.email">{{ booking.email }}</a>
+                  </div>
+                  <div class="info-item">
+                    <strong>Telefono:</strong>
+                    <a [href]="'tel:' + booking.telefono">{{ booking.telefono }}</a>
+                  </div>
+                </div>
+                
+                <div class="info-row">
+                  <div class="info-item">
+                    <strong>Numero persone:</strong>
+                    <span>{{ booking.numeroPersone }}</span>
+                  </div>
+                  <div class="info-item full-width">
+                    <strong>Tipo prenotazione:</strong>
+                    <div class="tipo-tags">
+                      @for (tipo of booking.tipoPrenotazione; track tipo) {
+                        <span class="tipo-tag">{{ tipo }}</span>
+                      }
+                    </div>
+                  </div>
+                </div>
+                
+                @if (booking.messaggio) {
+                  <div class="info-item full-width">
+                    <strong>Messaggio:</strong>
+                    <p class="message">{{ booking.messaggio }}</p>
+                  </div>
+                }
+              </div>
+            </div>
+          }
+        </div>
+      } @else {
+        <div class="empty-state">
+          <p>Non ci sono prenotazioni confermate.</p>
+        </div>
+      }
+    </div>
+  }
+  
+  <!-- Archived Bookings Tab -->
+  @if (activeTab() === 'archived') {
+    <div class="tab-content">
+      <h2>Prenotazioni Archiviate</h2>
+      @if (archivedBookings().length > 0) {
+        <div class="bookings-list">
+          @for (booking of archivedBookings(); track booking.id) {
+            <div class="booking-card archived">
+              <div class="booking-header">
+                <div class="booking-status">
+                  <span class="status-badge archived">{{ booking.status === 'rejected' ? 'Rifiutata' : 'Archiviata' }}</span>
+                  <span class="booking-id">ID: {{ booking.id }}</span>
+                </div>
+                <div class="booking-date-created">
+                  Archiviata il: {{ formatDateTime(booking.createdAt) }}
+                </div>
+              </div>
+              
+              <div class="booking-info">
+                <div class="info-row">
+                  <div class="info-item">
+                    <strong>Cliente:</strong>
+                    <span>{{ booking.nome }} {{ booking.cognome }}</span>
+                  </div>
+                  <div class="info-item">
+                    <strong>Data:</strong>
+                    <span>{{ formatDate(booking.data) }}</span>
+                  </div>
+                </div>
+                
+                <div class="info-row">
+                  <div class="info-item">
+                    <strong>Email:</strong>
+                    <span>{{ booking.email }}</span>
+                  </div>
+                  <div class="info-item">
+                    <strong>Telefono:</strong>
+                    <span>{{ booking.telefono }}</span>
+                  </div>
+                </div>
+                
+                <div class="info-row">
+                  <div class="info-item">
+                    <strong>Numero persone:</strong>
+                    <span>{{ booking.numeroPersone }}</span>
+                  </div>
+                  <div class="info-item full-width">
+                    <strong>Tipo prenotazione:</strong>
+                    <div class="tipo-tags">
+                      @for (tipo of booking.tipoPrenotazione; track tipo) {
+                        <span class="tipo-tag">{{ tipo }}</span>
+                      }
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+      } @else {
+        <div class="empty-state">
+          <p>Non ci sono prenotazioni archiviate.</p>
+        </div>
+      }
+    </div>
+  }
+  
+  @if (activeTab() === 'richieste') {
+    <div class="tab-content">
+      <h2>Richieste Contatto</h2>
+      @if (contactRequests().length > 0) {
+        <div class="bookings-list">
+          @for (req of contactRequests(); track req.id) {
+            <div class="booking-card contact">
+              <div class="booking-header">
+                <div class="booking-status">
+                  <span class="status-badge contact">Richiesta</span>
+                  <span class="booking-id">ID: {{ req.id }}</span>
+                </div>
+                <div class="booking-date-created">
+                  Ricevuta: {{ formatDateTime(req.createdAt) }}
+                </div>
+              </div>
+
+              <div class="booking-info">
+                <div class="info-row">
+                  <div class="info-item">
+                    <strong>Cliente:</strong>
+                    <span>{{ req.nome }} {{ req.cognome }}</span>
+                  </div>
+                  <div class="info-item">
+                    <strong>Email:</strong>
+                    <a [href]="'mailto:' + req.email">{{ req.email }}</a>
+                  </div>
+                </div>
+
+                <div class="info-row">
+                  <div class="info-item">
+                    <strong>Telefono:</strong>
+                    <span>{{ req.telefono }}</span>
+                  </div>
+                  <div class="info-item full-width">
+                    <strong>Interessi:</strong>
+                    <div class="tipo-tags">
+                      @if (req.degustazione) {
+                        <span class="tipo-tag">Degustazione</span>
+                      }
+                      @if (req.notteConNoi) {
+                        <span class="tipo-tag">Notte con noi</span>
+                      }
+                      @if (req.visitaTomba) {
+                        <span class="tipo-tag">Visita tomba</span>
+                      }
+                    </div>
+                  </div>
+                </div>
+
+                @if (req.messaggio) {
+                  <div class="info-item full-width">
+                    <strong>Messaggio:</strong>
+                    <p class="message">{{ req.messaggio }}</p>
+                  </div>
+                }
+              </div>
+            </div>
+          }
+        </div>
+      } @else {
+        <div class="empty-state">
+          <p>Non ci sono richieste di contatto.</p>
+        </div>
+      }
+    </div>
+  }
+</div>

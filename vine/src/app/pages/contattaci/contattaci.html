@@ -1,0 +1,94 @@
+<div class="contattaci-container">
+  <h1>Contattaci</h1>
+  
+  @if (!submitted()) {
+    <form [formGroup]="contactForm" (ngSubmit)="onSubmit()" class="contact-form">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="nome">Nome *</label>
+          <input 
+            type="text" 
+            id="nome" 
+            formControlName="nome" 
+            placeholder="Il tuo nome"
+            required
+          />
+        </div>
+        
+        <div class="form-group">
+          <label for="cognome">Cognome *</label>
+          <input 
+            type="text" 
+            id="cognome" 
+            formControlName="cognome" 
+            placeholder="Il tuo cognome"
+            required
+          />
+        </div>
+      </div>
+      
+      <div class="form-row">
+        <div class="form-group">
+          <label for="email">Email *</label>
+          <input 
+            type="email" 
+            id="email" 
+            formControlName="email" 
+            placeholder="tua&#64;email.it"
+            required
+          />
+        </div>
+        
+        <div class="form-group">
+          <label for="telefono">Telefono *</label>
+          <input 
+            type="tel" 
+            id="telefono" 
+            formControlName="telefono" 
+            placeholder="+39 XXX XXX XXXX"
+            required
+          />
+        </div>
+      </div>
+      
+      <div class="form-group checkboxes">
+        <h3>Interessi</h3>
+        
+        <label class="checkbox-label">
+          <input type="checkbox" formControlName="degustazione" />
+          <span>Degustazione</span>
+        </label>
+        
+        <label class="checkbox-label">
+          <input type="checkbox" formControlName="notteConNoi" />
+          <span>Notte con noi</span>
+        </label>
+        
+        <label class="checkbox-label">
+          <input type="checkbox" formControlName="visitaTomba" />
+          <span>Visita alla tomba</span>
+        </label>
+      </div>
+      
+      <div class="form-group">
+        <label for="messaggio">Messaggio</label>
+        <textarea 
+          id="messaggio" 
+          formControlName="messaggio" 
+          rows="5"
+          placeholder="Scrivi qui il tuo messaggio..."
+        ></textarea>
+      </div>
+      
+      <button type="submit" class="submit-btn" [disabled]="!contactForm.valid">
+        Invia Richiesta
+      </button>
+    </form>
+  } @else {
+    <div class="success-message">
+      <h2>Grazie per averci contattato!</h2>
+      <p>La tua richiesta è stata inviata con successo.</p>
+      <p>Ti contatteremo presto per confermare i dettagli.</p>
+    </div>
+  }
+</div>

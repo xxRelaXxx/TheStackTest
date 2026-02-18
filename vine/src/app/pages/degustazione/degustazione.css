@@ -1,0 +1,339 @@
+.degustazione-container {
+  max-width: 100%;
+  margin: 0;
+  padding: 3rem 4rem;
+  background: #f5e8d3;
+  min-height: calc(100vh - 200px);
+}
+
+.page-header {
+  text-align: left;
+  margin-bottom: 2rem;
+}
+
+.page-header h1 {
+  font-size: 3rem;
+  color: #1a1a1a;
+  margin-bottom: 0.5rem;
+  font-weight: 700;
+}
+
+.subtitle {
+  font-size: 1rem;
+  color: #4a4a4a;
+}
+
+/* Booking Card */
+.booking-card {
+  background: #e8d5c4;
+  padding: 2.5rem 3rem;
+  border-radius: 8px;
+  max-width: 900px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.booking-card {
+  margin: 0 auto;
+}
+
+.booking-card h2 {
+  font-size: 1.5rem;
+  color: #1a1a1a;
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+}
+
+/* Booking Form */
+.booking-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Radio Group */
+.radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.radio-label {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 1rem;
+  color: #2d2d2d;
+  cursor: pointer;
+  padding: 0.5rem 0;
+}
+
+.radio-label input[type='radio'] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  accent-color: #2d2d2d;
+}
+
+.radio-label span {
+  font-weight: 500;
+}
+
+/* Calendar Section */
+.calendar-section {
+  margin: 1rem 0;
+  background: white;
+  padding: 1.5rem;
+  border-radius: 6px;
+  overflow-x: auto;
+}
+
+.calendar-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.calendar-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  text-align: center;
+}
+
+.calendar-nav {
+  background: transparent;
+  border: 2px solid #ddd;
+  color: #333;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1.1rem;
+}
+
+.calendar-nav:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.calendar-wrapper {
+  width: 100%;
+  overflow: hidden;
+}
+
+.calendar-months {
+  display: block;
+}
+
+
+.month-column {
+  min-width: 200px;
+}
+
+.month-header {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin-bottom: 0.75rem;
+  text-align: center;
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.5rem;
+}
+
+/* Ensure calendar cells are consistent and centered */
+.calendar-grid .calendar-day,
+.calendar-grid .day-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 56px;
+}
+
+.calendar-day.empty {
+  background: transparent;
+  border: none;
+  cursor: default;
+  min-height: 56px;
+}
+
+/* Past or unavailable days: lower opacity */
+.calendar-day[disabled],
+.calendar-day.empty {
+  opacity: 0.35;
+}
+
+.day-header {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #666;
+  text-align: center;
+  padding: 0.25rem;
+}
+
+.calendar-day {
+  padding: 0.25rem;
+  background: transparent;
+  border: none;
+  font-size: 0.95rem;
+  text-align: center;
+  cursor: pointer;
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+
+.calendar-day .day-number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: white;
+  color: #1a1a1a;
+  box-shadow: 0 6px 14px rgba(0,0,0,0.06);
+}
+
+.calendar-day:hover:not(.empty) .day-number {
+  transform: translateY(-4px);
+}
+
+.calendar-day.selected .day-number {
+  background: #2d2d2d;
+  color: white;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+  transform: scale(1.03);
+}
+
+.calendar-day.empty {
+  background: transparent;
+  border: none;
+  cursor: default;
+}
+
+/* Form Groups */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.form-group label {
+  font-size: 0.9rem;
+  color: #2d2d2d;
+  font-weight: 500;
+}
+
+.form-group input,
+.form-group textarea {
+  padding: 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+  background: white;
+  transition: border-color 0.2s;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: #2d2d2d;
+}
+
+.form-group textarea {
+  resize: vertical;
+  font-family: inherit;
+}
+
+/* Submit Button */
+.submit-btn {
+  padding: 0.85rem 2rem;
+  background: white;
+  color: #2d2d2d;
+  border: 2px solid #2d2d2d;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  align-self: center;
+  min-width: 200px;
+}
+
+.submit-btn:hover:not(:disabled) {
+  background: #2d2d2d;
+  color: white;
+}
+
+.submit-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Success Message */
+.success-message {
+  background: white;
+  padding: 3rem;
+  border-radius: 8px;
+  text-align: center;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.success-message h2 {
+  color: #00864e;
+  margin-bottom: 1rem;
+}
+
+.success-message p {
+  font-size: 1.1rem;
+  color: #4a4a4a;
+}
+
+/* Responsive Design */
+@media (max-width: 968px) {
+  .degustazione-container {
+    padding: 2rem 1.5rem;
+  }
+  
+  .booking-card {
+    padding: 2rem 1.5rem;
+  }
+
+  .page-header {
+    text-align: center;
+  }
+  
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+  
+  .calendar-months {
+    flex-direction: column;
+  }
+  
+  .month-column {
+    min-width: 100%;
+  }
+}
+
+/* Small devices: make calendar more touch-friendly */
+@media (max-width: 640px) {
+  .calendar-grid .calendar-day,
+  .calendar-grid .day-header {
+    min-height: 52px;
+    font-size: 0.95rem;
+  }
+  .submit-btn {
+    min-width: 100%;
+  }
+}

@@ -1,0 +1,269 @@
+.home-container {
+  min-height: 100vh;
+}
+
+/* Hero Section with Parallax */
+.hero-section {
+  min-height: 100vh;
+  background: #d4a574;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4rem 6rem;
+  gap: 4rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-left {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.vine-frame-container {
+  position: relative;
+  width: 100%;
+  max-width: 500px;
+  transition: transform 0.1s ease-out;
+  will-change: transform;
+}
+
+.vine-frame {
+  width: 100%;
+  height: auto;
+  position: relative;
+  z-index: 2;
+  filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.3));
+}
+
+.frame-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 65%;
+  height: 65%;
+  border-radius: 50%;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.vineyard-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hero-right {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  color: white;
+  padding-right: 4rem;
+}
+
+.hero-right h1 {
+  font-size: 3.5rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  line-height: 1.2;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.hero-text {
+  font-size: 1.2rem;
+  line-height: 1.6;
+  max-width: 500px;
+}
+
+/* Experiences Section */
+.experiences-section {
+  background: #f5e8d3;
+}
+
+.experience-row {
+  display: flex;
+  align-items: stretch;
+  min-height: 320px;
+}
+
+.experience-row.reverse {
+  flex-direction: row-reverse;
+}
+
+.experience-image-container {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+}
+
+.experience-image-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Make each experience row split exactly in half (image / text) on desktop */
+@media (min-width: 969px) {
+  .experience-row {
+    gap: 0;
+  }
+
+  .experience-image-container,
+  .experience-text-container {
+    flex: 0 0 50%;
+    width: 50%;
+  }
+
+  /* Ensure text container fills its half and centers content vertically */
+  .experience-text-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 4rem 5rem;
+  }
+
+  /* Remove any rounded corners or gaps so halves meet exactly */
+  .experience-row + .experience-row {
+    margin-top: 0;
+  }
+}
+
+/* Mobile: stack and center */
+@media (max-width: 968px) {
+  .experience-row,
+  .experience-row.reverse {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .experience-image-container,
+  .experience-text-container {
+    flex: 1 1 auto;
+    width: 100%;
+  }
+
+  .experience-text-container {
+    padding: 2rem 1.5rem;
+    text-align: center;
+    align-items: center;
+  }
+}
+
+.experience-text-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 4rem 5rem;
+  background: #f5e8d3;
+}
+
+.experience-text-container h2 {
+  font-size: 2rem;
+  color: #2d2d2d;
+  margin-bottom: 1.5rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.experience-text-container p {
+  font-size: 1rem;
+  line-height: 1.8;
+  color: #4a4a4a;
+  margin-bottom: 2rem;
+}
+
+.cta-btn {
+  padding: 0.85rem 2.5rem;
+  background: transparent;
+  color: #2d2d2d;
+  border: 2px solid #2d2d2d;
+  border-radius: 4px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  align-self: flex-start;
+}
+
+.cta-btn:hover {
+  background: #2d2d2d;
+  color: white;
+  transform: translateX(5px);
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .hero-section {
+    padding: 3rem 4rem;
+  }
+  
+  .hero-right h1 {
+    font-size: 3rem;
+  }
+}
+
+@media (max-width: 968px) {
+  .hero-section {
+    flex-direction: column;
+    padding: 3rem 2rem;
+    min-height: auto;
+  }
+  
+  .hero-right {
+    padding-right: 0;
+    text-align: center;
+  }
+  
+  .hero-right h1 {
+    font-size: 2.5rem;
+  }
+  
+  .experience-row,
+  .experience-row.reverse {
+    flex-direction: column;
+  }
+  
+  .experience-image-container {
+    min-height: 350px;
+  }
+  
+  .experience-text-container {
+    padding: 3rem 2rem;
+  }
+
+  .experience-text-container {
+    text-align: center;
+    align-items: center;
+  }
+}
+
+@media (max-width: 640px) {
+  .hero-section {
+    padding: 2rem 1rem;
+  }
+  
+  .hero-right h1 {
+    font-size: 2rem;
+  }
+  
+  .hero-text {
+    font-size: 1rem;
+  }
+  
+  .experience-text-container {
+    padding: 2rem 1.5rem;
+  }
+  
+  .experience-text-container h2 {
+    font-size: 1.5rem;
+  }
+}
