@@ -1,0 +1,302 @@
+<!-- Inserisci Fattura -->
+<div class="max-w-2xl mx-auto space-y-6">
+
+  <!-- Header -->
+  <div>
+    <h1 class="text-xl font-semibold text-white">Inserisci Fattura</h1>
+    <p class="text-sm text-white/40">Home &rsaquo; From Elements</p>
+  </div>
+
+  @if (success()) {
+    <div class="bg-green-500/10 border border-green-500/20 rounded-xl p-4 text-green-400 text-sm flex items-center gap-2">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+      Fattura inserita con successo! Reindirizzamento...
+    </div>
+  }
+
+  <div class="t-card rounded-2xl border border-white/5 p-6 space-y-5">
+    <h2 class="font-semibold text-white border-b border-white/5 pb-3">Fattura</h2>
+
+    <!-- Cliente -->
+    <div>
+      <div class="flex items-center justify-between mb-1.5">
+        <label class="text-sm text-white/70">Cliente / Fornitore</label>
+        <button type="button" (click)="openModal('cliente')" class="text-xs text-blue-400 hover:text-blue-300 transition-colors">+ Aggiungi Cliente</button>
+      </div>
+      <select [ngModel]="clienteId()" (ngModelChange)="clienteId.set(+$event || null)"
+        [class.border-red-500]="hasError('cliente')"
+        class="w-full t-input border border-white/10 rounded-lg px-3 py-2.5 text-white text-sm focus:outline-none focus:border-blue-500">
+        <option [ngValue]="null">Nome / Ragione Sociale</option>
+        @for (c of clienti(); track c.id) {
+          <option [ngValue]="c.id">{{ c.nome }} {{ c.partitaIVA ? '— ' + c.partitaIVA : '' }}</option>
+        }
+      </select>
+      @if (hasError('cliente')) { <p class="text-red-400 text-xs mt-1">{{ getError('cliente') }}</p> }
+    </div>
+
+    <!-- Tipo -->
+    <div>
+      <label class="block text-sm text-white/70 mb-1.5">Tipo di Fattura</label>
+      <select [(ngModel)]="tipoFattura"
+        [class.border-red-500]="hasError('tipo')"
+        class="w-full t-input border border-white/10 rounded-lg px-3 py-2.5 text-white text-sm focus:outline-none focus:border-blue-500">
+        <option value="Entrata">Entrata</option>
+        <option value="Uscita">Uscita</option>
+      </select>
+      @if (hasError('tipo')) { <p class="text-red-400 text-xs mt-1">{{ getError('tipo') }}</p> }
+    </div>
+
+    <!-- Metodo Pagamento -->
+    <div>
+      <div class="flex items-center justify-between mb-1.5">
+        <label class="text-sm text-white/70">Metodo di Pagamento</label>
+        <button type="button" (click)="openModal('pagamento')" class="text-xs text-blue-400 hover:text-blue-300 transition-colors">+ Aggiungi Metodo</button>
+      </div>
+      <select [ngModel]="metodoPagamentoId()" (ngModelChange)="metodoPagamentoId.set(+$event || null)"
+        [class.border-red-500]="hasError('pagamento')"
+        class="w-full t-input border border-white/10 rounded-lg px-3 py-2.5 text-white text-sm focus:outline-none focus:border-blue-500">
+        <option [ngValue]="null">Bonifico, contanti, carte...</option>
+        @for (p of tipiPagamento(); track p.id) {
+          <option [ngValue]="p.id">{{ p.nome }}</option>
+        }
+      </select>
+      @if (hasError('pagamento')) { <p class="text-red-400 text-xs mt-1">{{ getError('pagamento') }}</p> }
+    </div>
+
+    <!-- Numero Fattura -->
+    <div>
+      <label class="block text-sm text-white/70 mb-1.5">Numero di Fattura</label>
+      <input type="text" [(ngModel)]="numeroFattura" placeholder="es. 2026/001"
+        [class.border-red-500]="hasError('numero')"
+        class="w-full t-input border border-white/10 rounded-lg px-3 py-2.5 text-white text-sm placeholder-white/20 focus:outline-none focus:border-blue-500"/>
+      @if (hasError('numero')) { <p class="text-red-400 text-xs mt-1">{{ getError('numero') }}</p> }
+    </div>
+
+    <!-- Date row -->
+    <div class="grid grid-cols-2 gap-4">
+      <div>
+        <label class="block text-sm text-white/70 mb-1.5">Data di Emissione</label>
+        <input type="date" [(ngModel)]="dataEmissione"
+          [class.border-red-500]="hasError('emissione')"
+          class="w-full t-input border border-white/10 rounded-lg px-3 py-2.5 text-white text-sm focus:outline-none focus:border-blue-500 [color-scheme:dark]"/>
+        @if (hasError('emissione')) { <p class="text-red-400 text-xs mt-1">{{ getError('emissione') }}</p> }
+      </div>
+      <div>
+        <label class="block text-sm text-white/70 mb-1.5">Data di Scadenza</label>
+        <input type="date" [(ngModel)]="dataScadenza"
+          [class.border-red-500]="hasError('scadenza')"
+          class="w-full t-input border border-white/10 rounded-lg px-3 py-2.5 text-white text-sm focus:outline-none focus:border-blue-500 [color-scheme:dark]"/>
+        @if (hasError('scadenza')) { <p class="text-red-400 text-xs mt-1">{{ getError('scadenza') }}</p> }
+      </div>
+    </div>
+
+    <!-- Assoggettamento -->
+    <div>
+      <div class="flex items-center justify-between mb-1.5">
+        <label class="text-sm text-white/70">Assoggettamento IVA</label>
+        <button type="button" (click)="openModal('assoggettamento')" class="text-xs text-blue-400 hover:text-blue-300 transition-colors">+ Aggiungi Assoggettamento</button>
+      </div>
+      <select [ngModel]="assoggettamentoId()" (ngModelChange)="assoggettamentoId.set(+$event || null)"
+        [class.border-red-500]="hasError('assoggettamento')"
+        class="w-full t-input border border-white/10 rounded-lg px-3 py-2.5 text-white text-sm focus:outline-none focus:border-blue-500">
+        <option [ngValue]="null">Seleziona IVA...</option>
+        @for (a of assoggettamenti(); track a.id) {
+          <option [ngValue]="a.id">{{ a.nome }} ({{ a.percentuale }}%)</option>
+        }
+      </select>
+      @if (hasError('assoggettamento')) { <p class="text-red-400 text-xs mt-1">{{ getError('assoggettamento') }}</p> }
+    </div>
+
+    <!-- Argomento / Tema -->
+    <div>
+      <div class="flex items-center justify-between mb-1.5">
+        <label class="text-sm text-white/70">Argomento (Tema)</label>
+        <button type="button" (click)="openModal('tema')" class="text-xs text-blue-400 hover:text-blue-300 transition-colors">+ Aggiungi Argomento</button>
+      </div>
+      <select [ngModel]="temaId()" (ngModelChange)="temaId.set(+$event || null)"
+        [class.border-red-500]="hasError('tema')"
+        class="w-full t-input border border-white/10 rounded-lg px-3 py-2.5 text-white text-sm focus:outline-none focus:border-blue-500">
+        <option [ngValue]="null">Seleziona argomento...</option>
+        @for (t of temi(); track t.id) {
+          <option [ngValue]="t.id">{{ t.nome }}</option>
+        }
+      </select>
+      @if (hasError('tema')) { <p class="text-red-400 text-xs mt-1">{{ getError('tema') }}</p> }
+    </div>
+
+    <!-- Imponibile + Totale -->
+    <div class="grid grid-cols-2 gap-4">
+      <div>
+        <label class="block text-sm text-white/70 mb-1.5">Imponibile (Netto IVA)</label>
+        <input type="number" step="0.01" min="0"
+          [ngModel]="imponibileNetto()" (ngModelChange)="imponibileNetto.set($event !== '' && $event !== null ? +$event : null)"
+          placeholder="0.00"
+          [class.border-red-500]="hasError('netto')"
+          class="w-full t-input border border-white/10 rounded-lg px-3 py-2.5 text-white text-sm placeholder-white/20 focus:outline-none focus:border-blue-500"/>
+        @if (hasError('netto')) { <p class="text-red-400 text-xs mt-1">{{ getError('netto') }}</p> }
+      </div>
+      <div>
+        <label class="block text-sm text-white/70 mb-1.5">Totale Fattura (calcolato)</label>
+        <div class="w-full t-bg border border-white/5 rounded-lg px-3 py-2.5 text-white/60 text-sm">
+          {{ totaleLordo() | number:'1.2-2' }}
+        </div>
+      </div>
+    </div>
+
+    <!-- Valuta -->
+    <div>
+      <div class="flex items-center justify-between mb-1.5">
+        <label class="text-sm text-white/70">Valuta</label>
+        <button type="button" (click)="openModal('valuta')" class="text-xs text-blue-400 hover:text-blue-300 transition-colors">+ Aggiungi Valuta</button>
+      </div>
+      <select [ngModel]="valutaId()" (ngModelChange)="valutaId.set(+$event || null)"
+        [class.border-red-500]="hasError('valuta')"
+        class="w-full t-input border border-white/10 rounded-lg px-3 py-2.5 text-white text-sm focus:outline-none focus:border-blue-500">
+        <option [ngValue]="null">EUR</option>
+        @for (v of valute(); track v.id) {
+          <option [ngValue]="v.id">{{ v.codice }} — {{ v.nome }} ({{ v.simbolo }})</option>
+        }
+      </select>
+      @if (hasError('valuta')) { <p class="text-red-400 text-xs mt-1">{{ getError('valuta') }}</p> }
+    </div>
+
+    <!-- Arrotondamento -->
+    <div>
+      <div class="flex items-center justify-between mb-1.5">
+        <label class="text-sm text-white/70">Arrotondamento (opzionale)</label>
+        <button type="button" (click)="openModal('arrotondamento')" class="text-xs text-blue-400 hover:text-blue-300 transition-colors">+ Aggiungi Arrotondamento</button>
+      </div>
+      <select [ngModel]="arrotondamentoId()" (ngModelChange)="arrotondamentoId.set(+$event || null)"
+        class="w-full t-input border border-white/10 rounded-lg px-3 py-2.5 text-white text-sm focus:outline-none focus:border-blue-500">
+        <option [ngValue]="null">Nessuno</option>
+        @for (a of arrotondamenti(); track a.id) {
+          <option [ngValue]="a.id">{{ a.nome }}</option>
+        }
+      </select>
+    </div>
+
+    <!-- Submit -->
+    <button type="button" (click)="submit()" [disabled]="loading() || success()"
+      class="w-full bg-blue-600 hover:bg-blue-500 disabled:opacity-50 text-white font-semibold py-3 rounded-xl transition-colors mt-2">
+      {{ loading() ? 'Inserimento...' : 'Aggiungi' }}
+    </button>
+  </div>
+</div>
+
+<!-- ═══ MODALS ═══ -->
+
+<!-- Add Cliente Modal -->
+@if (activeModal() === 'cliente') {
+  <div class="fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" (click)="closeModal()"></div>
+    <div class="relative t-card border border-white/10 rounded-2xl p-6 w-full max-w-sm shadow-2xl">
+      <h3 class="text-base font-semibold text-white mb-4">Nuovo Cliente</h3>
+      <div class="space-y-3">
+        <input type="text" [(ngModel)]="newClienteNome" placeholder="Nome / Ragione Sociale *"
+          class="w-full t-input border border-white/10 rounded-lg px-3 py-2.5 text-white text-sm placeholder-white/30 focus:outline-none focus:border-blue-500"/>
+        <input type="text" [(ngModel)]="newClientePIVA" placeholder="Partita IVA"
+          class="w-full t-input border border-white/10 rounded-lg px-3 py-2.5 text-white text-sm placeholder-white/30 focus:outline-none focus:border-blue-500"/>
+        <input type="text" [(ngModel)]="newClienteCF" placeholder="Codice Fiscale"
+          class="w-full t-input border border-white/10 rounded-lg px-3 py-2.5 text-white text-sm placeholder-white/30 focus:outline-none focus:border-blue-500"/>
+        <input type="text" [(ngModel)]="newClienteIBAN" placeholder="IBAN"
+          class="w-full t-input border border-white/10 rounded-lg px-3 py-2.5 text-white text-sm placeholder-white/30 focus:outline-none focus:border-blue-500"/>
+        <input type="email" [(ngModel)]="newClienteEmail" placeholder="Email"
+          class="w-full t-input border border-white/10 rounded-lg px-3 py-2.5 text-white text-sm placeholder-white/30 focus:outline-none focus:border-blue-500"/>
+      </div>
+      <div class="flex gap-3 mt-5">
+        <button (click)="closeModal()" class="flex-1 px-4 py-2.5 rounded-lg bg-white/5 text-sm text-white/70 hover:text-white transition-colors">Annulla</button>
+        <button (click)="addCliente()" [disabled]="addingNew()" class="flex-1 px-4 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-sm text-white font-medium transition-colors disabled:opacity-50">Crea</button>
+      </div>
+    </div>
+  </div>
+}
+
+<!-- Add Pagamento Modal -->
+@if (activeModal() === 'pagamento') {
+  <div class="fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" (click)="closeModal()"></div>
+    <div class="relative t-card border border-white/10 rounded-2xl p-6 w-full max-w-sm shadow-2xl">
+      <h3 class="text-base font-semibold text-white mb-4">Nuovo Metodo di Pagamento</h3>
+      <input type="text" [(ngModel)]="newPagamentoNome" placeholder="es. Bonifico Bancario"
+        class="w-full t-input border border-white/10 rounded-lg px-3 py-2.5 text-white text-sm placeholder-white/30 focus:outline-none focus:border-blue-500"/>
+      <div class="flex gap-3 mt-5">
+        <button (click)="closeModal()" class="flex-1 px-4 py-2.5 rounded-lg bg-white/5 text-sm text-white/70 hover:text-white transition-colors">Annulla</button>
+        <button (click)="addPagamento()" [disabled]="addingNew()" class="flex-1 px-4 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-sm text-white font-medium transition-colors disabled:opacity-50">Crea</button>
+      </div>
+    </div>
+  </div>
+}
+
+<!-- Add Assoggettamento Modal -->
+@if (activeModal() === 'assoggettamento') {
+  <div class="fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" (click)="closeModal()"></div>
+    <div class="relative t-card border border-white/10 rounded-2xl p-6 w-full max-w-sm shadow-2xl">
+      <h3 class="text-base font-semibold text-white mb-4">Nuovo Assoggettamento IVA</h3>
+      <div class="space-y-3">
+        <input type="text" [(ngModel)]="newAssoggettamentoNome" placeholder="es. IVA 22%"
+          class="w-full t-input border border-white/10 rounded-lg px-3 py-2.5 text-white text-sm placeholder-white/30 focus:outline-none focus:border-blue-500"/>
+        <input type="number" [(ngModel)]="newAssoggettamentoPerc" placeholder="Percentuale (es. 22)"
+          class="w-full t-input border border-white/10 rounded-lg px-3 py-2.5 text-white text-sm placeholder-white/30 focus:outline-none focus:border-blue-500"/>
+      </div>
+      <div class="flex gap-3 mt-5">
+        <button (click)="closeModal()" class="flex-1 px-4 py-2.5 rounded-lg bg-white/5 text-sm text-white/70 hover:text-white transition-colors">Annulla</button>
+        <button (click)="addAssoggettamento()" [disabled]="addingNew()" class="flex-1 px-4 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-sm text-white font-medium transition-colors disabled:opacity-50">Crea</button>
+      </div>
+    </div>
+  </div>
+}
+
+<!-- Add Tema Modal -->
+@if (activeModal() === 'tema') {
+  <div class="fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" (click)="closeModal()"></div>
+    <div class="relative t-card border border-white/10 rounded-2xl p-6 w-full max-w-sm shadow-2xl">
+      <h3 class="text-base font-semibold text-white mb-4">Nuovo Argomento (Tema)</h3>
+      <input type="text" [(ngModel)]="newTemaNome" placeholder="es. Amazon, Consulting..."
+        class="w-full t-input border border-white/10 rounded-lg px-3 py-2.5 text-white text-sm placeholder-white/30 focus:outline-none focus:border-blue-500"/>
+      <div class="flex gap-3 mt-5">
+        <button (click)="closeModal()" class="flex-1 px-4 py-2.5 rounded-lg bg-white/5 text-sm text-white/70 hover:text-white transition-colors">Annulla</button>
+        <button (click)="addTema()" [disabled]="addingNew()" class="flex-1 px-4 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-sm text-white font-medium transition-colors disabled:opacity-50">Crea</button>
+      </div>
+    </div>
+  </div>
+}
+
+<!-- Add Valuta Modal -->
+@if (activeModal() === 'valuta') {
+  <div class="fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" (click)="closeModal()"></div>
+    <div class="relative t-card border border-white/10 rounded-2xl p-6 w-full max-w-sm shadow-2xl">
+      <h3 class="text-base font-semibold text-white mb-4">Nuova Valuta</h3>
+      <div class="space-y-3">
+        <input type="text" [(ngModel)]="newValutaCodice" placeholder="Codice (es. EUR, USD) *"
+          class="w-full t-input border border-white/10 rounded-lg px-3 py-2.5 text-white text-sm placeholder-white/30 focus:outline-none focus:border-blue-500"/>
+        <input type="text" [(ngModel)]="newValutaNome" placeholder="Nome (es. Euro)"
+          class="w-full t-input border border-white/10 rounded-lg px-3 py-2.5 text-white text-sm placeholder-white/30 focus:outline-none focus:border-blue-500"/>
+        <input type="text" [(ngModel)]="newValutaSimbolo" placeholder="Simbolo (es. €)"
+          class="w-full t-input border border-white/10 rounded-lg px-3 py-2.5 text-white text-sm placeholder-white/30 focus:outline-none focus:border-blue-500"/>
+      </div>
+      <div class="flex gap-3 mt-5">
+        <button (click)="closeModal()" class="flex-1 px-4 py-2.5 rounded-lg bg-white/5 text-sm text-white/70 hover:text-white transition-colors">Annulla</button>
+        <button (click)="addValuta()" [disabled]="addingNew()" class="flex-1 px-4 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-sm text-white font-medium transition-colors disabled:opacity-50">Crea</button>
+      </div>
+    </div>
+  </div>
+}
+
+<!-- Add Arrotondamento Modal -->
+@if (activeModal() === 'arrotondamento') {
+  <div class="fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" (click)="closeModal()"></div>
+    <div class="relative t-card border border-white/10 rounded-2xl p-6 w-full max-w-sm shadow-2xl">
+      <h3 class="text-base font-semibold text-white mb-4">Nuovo Arrotondamento</h3>
+      <input type="text" [(ngModel)]="newArrotondamentoNome" placeholder="es. A 2 decimali"
+        class="w-full t-input border border-white/10 rounded-lg px-3 py-2.5 text-white text-sm placeholder-white/30 focus:outline-none focus:border-blue-500"/>
+      <div class="flex gap-3 mt-5">
+        <button (click)="closeModal()" class="flex-1 px-4 py-2.5 rounded-lg bg-white/5 text-sm text-white/70 hover:text-white transition-colors">Annulla</button>
+        <button (click)="addArrotondamento()" [disabled]="addingNew()" class="flex-1 px-4 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-sm text-white font-medium transition-colors disabled:opacity-50">Crea</button>
+      </div>
+    </div>
+  </div>
+}

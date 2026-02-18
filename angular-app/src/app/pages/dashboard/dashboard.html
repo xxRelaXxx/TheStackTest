@@ -1,0 +1,102 @@
+<!-- Dashboard -->
+<div class="space-y-6">
+
+  <!-- Header row -->
+  <div class="flex items-center justify-between">
+    <div>
+      <h1 class="text-xl font-semibold text-white">Dashboard</h1>
+      <p class="text-sm text-white/40">Home &rsaquo; Dashboard</p>
+    </div>
+    <button (click)="loadData()"
+      class="flex items-center gap-2 px-4 py-2 rounded-lg bg-white/5 hover:bg-white/10 text-sm text-white/70 hover:text-white transition-colors">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+      </svg>
+      Aggiorna
+    </button>
+  </div>
+
+  <!-- Error -->
+  @if (error()) {
+    <div class="bg-red-500/10 border border-red-500/20 rounded-xl p-4 text-red-400 text-sm">{{ error() }}</div>
+  }
+
+  <!-- Loading -->
+  @if (loading()) {
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+      <div class="t-card rounded-2xl p-6 animate-pulse h-32"></div>
+      <div class="t-card rounded-2xl p-6 animate-pulse h-32"></div>
+    </div>
+    <div class="t-card rounded-2xl p-6 animate-pulse h-64"></div>
+  }
+
+  @if (!loading() && stats()) {
+    <!-- Stat Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+
+      <!-- Profitto -->
+      <div class="t-card rounded-2xl p-6 border border-white/5">
+        <div class="flex items-start justify-between">
+          <div>
+            <div class="w-10 h-10 rounded-xl bg-blue-600/20 flex items-center justify-center mb-3">
+              <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                  d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0"/>
+              </svg>
+            </div>
+            <p class="text-sm text-white/50 mb-1">Profitto</p>
+            <p class="text-3xl font-bold text-white">€ {{ formatCurrency(stats()!.profitto) }}</p>
+          </div>
+          <span [class]="trendClass(stats()!.percentualeProfitto)"
+            class="text-xs font-semibold px-2.5 py-1 rounded-full flex items-center gap-1">
+            {{ trendIcon(stats()!.percentualeProfitto) }}
+            {{ stats()!.percentualeProfitto | number:'1.2-2' }}%
+          </span>
+        </div>
+      </div>
+
+      <!-- Entrate -->
+      <div class="t-card rounded-2xl p-6 border border-white/5">
+        <div class="flex items-start justify-between">
+          <div>
+            <div class="w-10 h-10 rounded-xl bg-indigo-600/20 flex items-center justify-center mb-3">
+              <svg class="w-5 h-5 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                  d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+              </svg>
+            </div>
+            <p class="text-sm text-white/50 mb-1">Entrate</p>
+            <p class="text-3xl font-bold text-white">€ {{ formatCurrency(stats()!.entrate) }}</p>
+          </div>
+          <span [class]="trendClass(stats()!.percentualeEntrate)"
+            class="text-xs font-semibold px-2.5 py-1 rounded-full flex items-center gap-1">
+            {{ trendIcon(stats()!.percentualeEntrate) }}
+            {{ stats()!.percentualeEntrate | number:'1.2-2' }}%
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bar Chart -->
+    <div class="t-card rounded-2xl p-6 border border-white/5">
+      <div class="flex items-center justify-between mb-5">
+        <h2 class="text-base font-semibold text-white">Monthly Sales</h2>
+        <button (click)="loadData()" class="text-white/30 hover:text-white/70 transition-colors">
+          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12 8c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm0 6c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm0-16C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/>
+          </svg>
+        </button>
+      </div>
+      <div class="h-64">
+        @if (stats()!.ultimiDodiciMesi.length === 0) {
+          <div class="flex items-center justify-center h-full text-white/30 text-sm">
+            Nessun dato disponibile per gli ultimi 12 mesi
+          </div>
+        } @else {
+          <canvas #barChart></canvas>
+        }
+      </div>
+    </div>
+  }
+</div>

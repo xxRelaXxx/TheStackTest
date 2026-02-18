@@ -1,0 +1,324 @@
+<!-- Fatture Page -->
+<div class="space-y-6">
+
+  <!-- Header -->
+  <div class="flex items-center justify-between">
+    <div>
+      <h1 class="text-xl font-semibold text-white">Record Transazioni</h1>
+      <p class="text-sm text-white/40">Home &rsaquo; Record Transazioni</p>
+    </div>
+    <div class="flex items-center gap-3">
+      @if (isFiltered()) {
+        <button (click)="clearFilter()" class="flex items-center gap-2 px-4 py-2 rounded-lg bg-red-500/20 border border-red-500/20 text-sm text-red-400 hover:bg-red-500/30 transition-colors">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+          Rimuovi filtro
+        </button>
+      }
+      <button (click)="loadAll()" class="flex items-center gap-2 px-4 py-2 rounded-lg bg-white/5 hover:bg-white/10 text-sm text-white/70 hover:text-white transition-colors">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+        Aggiorna
+      </button>
+    </div>
+  </div>
+
+  @if (error()) {
+    <div class="bg-red-500/10 border border-red-500/20 rounded-xl p-4 text-red-400 text-sm">{{ error() }}</div>
+  }
+
+  <!-- ENTRATE TABLE -->
+  <div class="t-card rounded-2xl border border-white/5">
+    <div class="flex items-center justify-between px-6 py-4 border-b border-white/5">
+      <h2 class="font-semibold text-white">Entrate</h2>
+      <div class="flex items-center gap-3">
+        @if (selectedEntrateIds().size > 0) {
+          <button (click)="deleteSelectedEntrate()" class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-red-500/20 border border-red-500/20 text-sm text-red-400 hover:bg-red-500/30 transition-colors">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+            Elimina ({{ selectedEntrateIds().size }})
+          </button>
+        }
+        <button (click)="openFilter()" class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-sm text-white/70 hover:text-white hover:bg-white/10 transition-colors">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2a1 1 0 01-.293.707L13 13.414V19a1 1 0 01-.553.894l-4 2A1 1 0 017 21v-7.586L3.293 6.707A1 1 0 013 6V4z"/></svg>
+          Filtro
+        </button>
+        <a routerLink="/fatture" class="px-3 py-1.5 rounded-lg bg-blue-600/20 border border-blue-500/20 text-sm text-blue-400 hover:bg-blue-600/30 transition-colors">Vedi tutte</a>
+      </div>
+    </div>
+
+    <div class="overflow-x-auto">
+      @if (loading()) {
+        <div class="p-8 text-center text-white/30 text-sm animate-pulse">Caricamento...</div>
+      } @else if (entrate().length === 0) {
+        <div class="p-8 text-center text-white/30 text-sm">Nessuna fattura in entrata</div>
+      } @else {
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="border-b border-white/5">
+              <th class="w-10 px-4 py-3">
+                <input type="checkbox" [checked]="allEntrateSelected()" (change)="toggleAllEntrate()"
+                  class="rounded border-white/20 bg-white/5 text-blue-500 focus:ring-0"/>
+              </th>
+              <th class="px-4 py-3 text-left text-white/40 font-medium">Numero Fattura</th>
+              <th class="px-4 py-3 text-left text-white/40 font-medium">Cliente</th>
+              <th class="px-4 py-3 text-left text-white/40 font-medium">Argomento</th>
+              <th class="px-4 py-3 text-left text-white/40 font-medium">Netto</th>
+              <th class="px-4 py-3 text-left text-white/40 font-medium">Lordo</th>
+              <th class="px-4 py-3 text-left text-white/40 font-medium">Valuta</th>
+              <th class="px-4 py-3 text-left text-white/40 font-medium">IVA</th>
+              <th class="px-4 py-3 text-left text-white/40 font-medium">Pagamento</th>
+              <th class="px-4 py-3 text-left text-white/40 font-medium">Scadenza</th>
+              <th class="px-4 py-3 text-left text-white/40 font-medium">Stato</th>
+              <th class="w-10 px-4 py-3"></th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (f of entrate(); track f.id) {
+              <tr class="border-b border-white/5 hover:bg-white/3 cursor-pointer transition-colors" (click)="openDetail(f)">
+                <td class="px-4 py-3" (click)="$event.stopPropagation()">
+                  <input type="checkbox" [checked]="isEntrataSelected(f.id)" (change)="toggleEntrataSelect(f.id)"
+                    class="rounded border-white/20 bg-white/5 text-blue-500 focus:ring-0"/>
+                </td>
+                <td class="px-4 py-3 text-white/70 font-mono text-xs">{{ f.numeroFattura }}</td>
+                <td class="px-4 py-3">
+                  <div class="flex items-center gap-2">
+                    <div class="w-7 h-7 rounded-full bg-blue-600 flex items-center justify-center text-xs font-bold flex-shrink-0">
+                      {{ clienteInitials(f.cliente?.nome || '?') }}
+                    </div>
+                    <div>
+                      <p class="text-white/80 text-xs font-medium">{{ f.cliente?.nome }}</p>
+                      <p class="text-white/30 text-xs">{{ f.cliente?.partitaIVA || f.cliente?.codiceFiscale }}</p>
+                    </div>
+                  </div>
+                </td>
+                <td class="px-4 py-3 text-white/60 text-xs">{{ f.tema?.nome }}</td>
+                <td class="px-4 py-3 text-white/70 text-xs">{{ f.imponibileNetto | number:'1.2-2' }} {{ f.valuta?.codice }}</td>
+                <td class="px-4 py-3 text-white/80 text-xs font-medium">{{ f.totaleLordo | number:'1.2-2' }} {{ f.valuta?.codice }}</td>
+                <td class="px-4 py-3 text-white/60 text-xs">{{ f.valuta?.codice }}</td>
+                <td class="px-4 py-3 text-white/60 text-xs">{{ f.assoggettamento?.nome }}</td>
+                <td class="px-4 py-3 text-white/60 text-xs">{{ f.metodoPagamento?.nome }}</td>
+                <td class="px-4 py-3 text-white/60 text-xs">{{ formatDate(f.dataScadenza) }}</td>
+                <td class="px-4 py-3">
+                  <span [class]="statusClass(f)" class="px-2 py-0.5 rounded-full text-xs font-medium">{{ statusLabel(f) }}</span>
+                </td>
+                <td class="px-4 py-3" (click)="$event.stopPropagation()">
+                  <button (click)="deleteFattura(f.id)" class="text-white/20 hover:text-red-400 transition-colors p-1 rounded">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                    </svg>
+                  </button>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      }
+    </div>
+  </div>
+
+  <!-- USCITE TABLE -->
+  <div class="t-card rounded-2xl border border-white/5">
+    <div class="flex items-center justify-between px-6 py-4 border-b border-white/5">
+      <h2 class="font-semibold text-white">Uscite</h2>
+      <div class="flex items-center gap-3">
+        @if (selectedUsciteIds().size > 0) {
+          <button (click)="deleteSelectedUscite()" class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-red-500/20 border border-red-500/20 text-sm text-red-400 hover:bg-red-500/30 transition-colors">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+            Elimina ({{ selectedUsciteIds().size }})
+          </button>
+        }
+        <button (click)="openFilter()" class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-sm text-white/70 hover:text-white hover:bg-white/10 transition-colors">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2a1 1 0 01-.293.707L13 13.414V19a1 1 0 01-.553.894l-4 2A1 1 0 017 21v-7.586L3.293 6.707A1 1 0 013 6V4z"/></svg>
+          Filtro
+        </button>
+        <a routerLink="/fatture" class="px-3 py-1.5 rounded-lg bg-blue-600/20 border border-blue-500/20 text-sm text-blue-400 hover:bg-blue-600/30 transition-colors">Vedi tutte</a>
+      </div>
+    </div>
+
+    <div class="overflow-x-auto">
+      @if (loading()) {
+        <div class="p-8 text-center text-white/30 text-sm animate-pulse">Caricamento...</div>
+      } @else if (uscite().length === 0) {
+        <div class="p-8 text-center text-white/30 text-sm">Nessuna fattura in uscita</div>
+      } @else {
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="border-b border-white/5">
+              <th class="w-10 px-4 py-3">
+                <input type="checkbox" [checked]="allUsciteSelected()" (change)="toggleAllUscite()"
+                  class="rounded border-white/20 bg-white/5 text-blue-500 focus:ring-0"/>
+              </th>
+              <th class="px-4 py-3 text-left text-white/40 font-medium">Numero Fattura</th>
+              <th class="px-4 py-3 text-left text-white/40 font-medium">Cliente</th>
+              <th class="px-4 py-3 text-left text-white/40 font-medium">Argomento</th>
+              <th class="px-4 py-3 text-left text-white/40 font-medium">Netto</th>
+              <th class="px-4 py-3 text-left text-white/40 font-medium">Lordo</th>
+              <th class="px-4 py-3 text-left text-white/40 font-medium">Valuta</th>
+              <th class="px-4 py-3 text-left text-white/40 font-medium">IVA</th>
+              <th class="px-4 py-3 text-left text-white/40 font-medium">Pagamento</th>
+              <th class="px-4 py-3 text-left text-white/40 font-medium">Scadenza</th>
+              <th class="px-4 py-3 text-left text-white/40 font-medium">Stato</th>
+              <th class="w-10 px-4 py-3"></th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (f of uscite(); track f.id) {
+              <tr class="border-b border-white/5 hover:bg-white/3 cursor-pointer transition-colors" (click)="openDetail(f)">
+                <td class="px-4 py-3" (click)="$event.stopPropagation()">
+                  <input type="checkbox" [checked]="isUscitaSelected(f.id)" (change)="toggleUscitaSelect(f.id)"
+                    class="rounded border-white/20 bg-white/5 text-blue-500 focus:ring-0"/>
+                </td>
+                <td class="px-4 py-3 text-white/70 font-mono text-xs">{{ f.numeroFattura }}</td>
+                <td class="px-4 py-3">
+                  <div class="flex items-center gap-2">
+                    <div class="w-7 h-7 rounded-full bg-indigo-600 flex items-center justify-center text-xs font-bold flex-shrink-0">
+                      {{ clienteInitials(f.cliente?.nome || '?') }}
+                    </div>
+                    <div>
+                      <p class="text-white/80 text-xs font-medium">{{ f.cliente?.nome }}</p>
+                      <p class="text-white/30 text-xs">{{ f.cliente?.partitaIVA || f.cliente?.codiceFiscale }}</p>
+                    </div>
+                  </div>
+                </td>
+                <td class="px-4 py-3 text-white/60 text-xs">{{ f.tema?.nome }}</td>
+                <td class="px-4 py-3 text-white/70 text-xs">{{ f.imponibileNetto | number:'1.2-2' }} {{ f.valuta?.codice }}</td>
+                <td class="px-4 py-3 text-white/80 text-xs font-medium">{{ f.totaleLordo | number:'1.2-2' }} {{ f.valuta?.codice }}</td>
+                <td class="px-4 py-3 text-white/60 text-xs">{{ f.valuta?.codice }}</td>
+                <td class="px-4 py-3 text-white/60 text-xs">{{ f.assoggettamento?.nome }}</td>
+                <td class="px-4 py-3 text-white/60 text-xs">{{ f.metodoPagamento?.nome }}</td>
+                <td class="px-4 py-3 text-white/60 text-xs">{{ formatDate(f.dataScadenza) }}</td>
+                <td class="px-4 py-3">
+                  <span [class]="statusClass(f)" class="px-2 py-0.5 rounded-full text-xs font-medium">{{ statusLabel(f) }}</span>
+                </td>
+                <td class="px-4 py-3" (click)="$event.stopPropagation()">
+                  <button (click)="deleteFattura(f.id)" class="text-white/20 hover:text-red-400 transition-colors p-1 rounded">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                    </svg>
+                  </button>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      }
+    </div>
+  </div>
+</div>
+
+<!-- Filter Modal -->
+@if (showFilterModal()) {
+  <div class="fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" (click)="closeFilter()"></div>
+    <div class="relative t-card border border-white/10 rounded-2xl p-6 w-full max-w-sm shadow-2xl">
+      <h3 class="text-lg font-semibold text-white mb-5">Filtra Fatture</h3>
+
+      <div class="space-y-4">
+        <div>
+          <label class="block text-sm text-white/50 mb-1.5">Cliente</label>
+          <select [ngModel]="filterClienteId()" (ngModelChange)="filterClienteId.set(+$event || null)"
+            class="w-full t-input border border-white/10 rounded-lg px-3 py-2.5 text-white text-sm focus:outline-none focus:border-blue-500">
+            <option [ngValue]="null">Tutti i clienti</option>
+            @for (c of clienti(); track c.id) {
+              <option [ngValue]="c.id">{{ c.nome }}</option>
+            }
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-sm text-white/50 mb-1.5">Argomento (Tema)</label>
+          <select [ngModel]="filterTemaId()" (ngModelChange)="filterTemaId.set(+$event || null)"
+            class="w-full t-input border border-white/10 rounded-lg px-3 py-2.5 text-white text-sm focus:outline-none focus:border-blue-500">
+            <option [ngValue]="null">Tutti i temi</option>
+            @for (t of temi(); track t.id) {
+              <option [ngValue]="t.id">{{ t.nome }}</option>
+            }
+          </select>
+        </div>
+      </div>
+
+      <div class="flex gap-3 mt-6">
+        <button (click)="closeFilter()" class="flex-1 px-4 py-2.5 rounded-lg bg-white/5 hover:bg-white/10 text-sm text-white/70 hover:text-white transition-colors">Annulla</button>
+        <button (click)="applyFilter()" class="flex-1 px-4 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-sm text-white font-medium transition-colors">Applica</button>
+      </div>
+    </div>
+  </div>
+}
+
+<!-- Detail Modal -->
+@if (detailFattura()) {
+  <div class="fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" (click)="closeDetail()"></div>
+    <div class="relative t-card border border-white/10 rounded-2xl p-6 w-full max-w-lg shadow-2xl max-h-[85vh] overflow-y-auto">
+      <div class="flex items-center justify-between mb-5">
+        <h3 class="text-lg font-semibold text-white">Dettaglio Fattura</h3>
+        <button (click)="closeDetail()" class="text-white/40 hover:text-white transition-colors">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <div class="space-y-3 text-sm">
+        <div class="flex justify-between py-2 border-b border-white/5">
+          <span class="text-white/40">Numero</span>
+          <span class="text-white font-mono">{{ detailFattura()!.numeroFattura }}</span>
+        </div>
+        <div class="flex justify-between py-2 border-b border-white/5">
+          <span class="text-white/40">Tipo</span>
+          <span [class]="detailFattura()!.tipoFattura === 'Entrata' ? 'text-green-400' : 'text-red-400'" class="font-medium">{{ detailFattura()!.tipoFattura }}</span>
+        </div>
+        <div class="flex justify-between py-2 border-b border-white/5">
+          <span class="text-white/40">Cliente</span>
+          <span class="text-white">{{ detailFattura()!.cliente?.nome }}</span>
+        </div>
+        <div class="flex justify-between py-2 border-b border-white/5">
+          <span class="text-white/40">P.IVA / CF</span>
+          <span class="text-white/70">{{ detailFattura()!.cliente?.partitaIVA || detailFattura()!.cliente?.codiceFiscale || '—' }}</span>
+        </div>
+        <div class="flex justify-between py-2 border-b border-white/5">
+          <span class="text-white/40">IBAN</span>
+          <span class="text-white/70 font-mono text-xs">{{ detailFattura()!.cliente?.iban || '—' }}</span>
+        </div>
+        <div class="flex justify-between py-2 border-b border-white/5">
+          <span class="text-white/40">Argomento</span>
+          <span class="text-white/70">{{ detailFattura()!.tema?.nome }}</span>
+        </div>
+        <div class="flex justify-between py-2 border-b border-white/5">
+          <span class="text-white/40">Imponibile Netto</span>
+          <span class="text-white">{{ detailFattura()!.imponibileNetto | number:'1.2-2' }} {{ detailFattura()!.valuta?.codice }}</span>
+        </div>
+        <div class="flex justify-between py-2 border-b border-white/5">
+          <span class="text-white/40">IVA</span>
+          <span class="text-white/70">{{ detailFattura()!.assoggettamento?.nome }} ({{ detailFattura()!.assoggettamento?.percentuale }}%)</span>
+        </div>
+        <div class="flex justify-between py-2 border-b border-white/5">
+          <span class="text-white/40">Totale Lordo</span>
+          <span class="text-white font-semibold">{{ detailFattura()!.totaleLordo | number:'1.2-2' }} {{ detailFattura()!.valuta?.codice }}</span>
+        </div>
+        <div class="flex justify-between py-2 border-b border-white/5">
+          <span class="text-white/40">Valuta</span>
+          <span class="text-white/70">{{ detailFattura()!.valuta?.codice }}</span>
+        </div>
+        <div class="flex justify-between py-2 border-b border-white/5">
+          <span class="text-white/40">Metodo di Pagamento</span>
+          <span class="text-white/70">{{ detailFattura()!.metodoPagamento?.nome }}</span>
+        </div>
+        <div class="flex justify-between py-2 border-b border-white/5">
+          <span class="text-white/40">Data Emissione</span>
+          <span class="text-white/70">{{ formatDate(detailFattura()!.dataEmissione) }}</span>
+        </div>
+        <div class="flex justify-between py-2 border-b border-white/5">
+          <span class="text-white/40">Data Scadenza</span>
+          <span class="text-white/70">{{ formatDate(detailFattura()!.dataScadenza) }}</span>
+        </div>
+        @if (detailFattura()!.arrotondamento) {
+          <div class="flex justify-between py-2 border-b border-white/5">
+            <span class="text-white/40">Arrotondamento</span>
+            <span class="text-white/70">{{ detailFattura()!.arrotondamento?.nome }}</span>
+          </div>
+        }
+        <div class="flex justify-between py-2">
+          <span class="text-white/40">Stato</span>
+          <span [class]="statusClass(detailFattura()!)" class="px-2 py-0.5 rounded-full text-xs font-medium">{{ statusLabel(detailFattura()!) }}</span>
+        </div>
+      </div>
+      <button (click)="closeDetail()" class="w-full mt-6 px-4 py-2.5 rounded-lg bg-white/5 hover:bg-white/10 text-sm text-white/70 hover:text-white transition-colors">Chiudi</button>
+    </div>
+  </div>
+}

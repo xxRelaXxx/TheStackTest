@@ -1,0 +1,180 @@
+<!-- Account / Profile -->
+<div class="max-w-2xl mx-auto space-y-6">
+
+  <!-- Header -->
+  <div>
+    <h1 class="text-xl font-semibold text-white">Profile</h1>
+    <p class="text-sm text-white/40">Home &rsaquo; Profile</p>
+  </div>
+
+  @if (profileSuccess()) {
+    <div class="bg-green-500/10 border border-green-500/20 rounded-xl p-4 text-green-400 text-sm">
+      Profilo aggiornato con successo!
+    </div>
+  }
+
+  <!-- Profile Card -->
+  <div class="t-card rounded-2xl border border-white/5 overflow-hidden">
+    <!-- Avatar section -->
+    <div class="flex items-center justify-between px-6 py-5 border-b border-white/5">
+      <div class="flex items-center gap-4">
+        <div class="w-14 h-14 rounded-full bg-blue-600 flex items-center justify-center text-xl font-bold">
+          {{ initials(currentUser()?.username || '') }}
+        </div>
+        <div>
+          <p class="font-semibold text-white">{{ currentUser()?.username }}</p>
+          <p class="text-sm text-white/40">{{ currentUser()?.isAdmin ? 'Admin' : 'Utente' }}</p>
+        </div>
+      </div>
+      <button (click)="startEditProfile()" class="flex items-center gap-2 px-4 py-2 rounded-lg border border-white/10 text-sm text-white/70 hover:text-white hover:bg-white/5 transition-colors">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
+        </svg>
+        Modifica
+      </button>
+    </div>
+
+    <!-- Personal Info -->
+    <div class="px-6 py-5">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="font-medium text-white">Personal Information</h3>
+      </div>
+      <div class="grid grid-cols-2 gap-6">
+        <div>
+          <p class="text-xs text-white/40 mb-1">Username</p>
+          <p class="text-sm text-white font-medium">{{ currentUser()?.username }}</p>
+        </div>
+        <div>
+          <p class="text-xs text-white/40 mb-1">Email address</p>
+          <p class="text-sm text-white font-medium">{{ currentUser()?.email }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Admin: user list -->
+  @if (isAdmin) {
+    <div class="t-card rounded-2xl border border-white/5">
+      <div class="flex items-center justify-between px-6 py-4 border-b border-white/5">
+        <h3 class="font-semibold text-white">Gestione Account</h3>
+        <button (click)="openAddModal()" class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-sm text-white transition-colors">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+          Aggiungi Account
+        </button>
+      </div>
+
+      @if (accountsLoading()) {
+        <div class="flex items-center justify-center py-10">
+          <svg class="w-6 h-6 animate-spin text-blue-400" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/>
+          </svg>
+        </div>
+      } @else if (accountsError()) {
+        <div class="flex flex-col items-center gap-3 py-8 px-6 text-center">
+          <p class="text-sm text-red-400">{{ accountsError() }}</p>
+          <button (click)="loadAccounts()" class="px-4 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-sm text-white/70 hover:text-white transition-colors">
+            Riprova
+          </button>
+        </div>
+      } @else if (accounts().length > 0) {
+        <div class="divide-y divide-white/5">
+          @for (acc of accounts(); track acc.id) {
+            <div class="flex items-center justify-between px-6 py-4">
+              <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-full bg-blue-600/30 flex items-center justify-center text-sm font-bold text-blue-400">
+                  {{ initials(acc.username) }}
+                </div>
+                <div>
+                  <p class="text-sm font-medium text-white">{{ acc.username }}</p>
+                  <p class="text-xs text-white/40">{{ acc.email }}</p>
+                </div>
+              </div>
+              <div class="flex items-center gap-3">
+                @if (acc.isAdmin) {
+                  <span class="px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-400 text-xs font-medium">Admin</span>
+                }
+                @if (acc.id !== currentUser()?.id) {
+                  <button (click)="deleteAccount(acc.id)" class="text-white/20 hover:text-red-400 transition-colors p-1.5 rounded">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                    </svg>
+                  </button>
+                }
+              </div>
+            </div>
+          }
+        </div>
+      } @else {
+        <div class="py-8 text-center text-sm text-white/30">Nessun account trovato.</div>
+      }
+    </div>
+  }
+</div>
+
+<!-- Edit Profile Modal -->
+@if (editingProfile()) {
+  <div class="fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" (click)="cancelEditProfile()"></div>
+    <div class="relative t-card border border-white/10 rounded-2xl p-6 w-full max-w-sm shadow-2xl">
+      <h3 class="text-base font-semibold text-white mb-5">Modifica Profilo</h3>
+      <div class="space-y-3">
+        <div>
+          <label class="block text-xs text-white/50 mb-1">Username</label>
+          <input type="text" [(ngModel)]="editUsername"
+            class="w-full t-input border border-white/10 rounded-lg px-3 py-2.5 text-white text-sm focus:outline-none focus:border-blue-500"/>
+        </div>
+        <div>
+          <label class="block text-xs text-white/50 mb-1">Email</label>
+          <input type="email" [(ngModel)]="editEmail"
+            class="w-full t-input border border-white/10 rounded-lg px-3 py-2.5 text-white text-sm focus:outline-none focus:border-blue-500"/>
+        </div>
+        <div>
+          <label class="block text-xs text-white/50 mb-1">Nuova Password (lascia vuoto per non cambiare)</label>
+          <input type="password" [(ngModel)]="editPassword" placeholder="••••••••"
+            class="w-full t-input border border-white/10 rounded-lg px-3 py-2.5 text-white text-sm placeholder-white/20 focus:outline-none focus:border-blue-500"/>
+        </div>
+      </div>
+      @if (profileError()) {
+        <p class="text-red-400 text-xs mt-3">{{ profileError() }}</p>
+      }
+      <div class="flex gap-3 mt-5">
+        <button (click)="cancelEditProfile()" class="flex-1 px-4 py-2.5 rounded-lg bg-white/5 text-sm text-white/70 hover:text-white transition-colors">Annulla</button>
+        <button (click)="saveProfile()" [disabled]="profileSaving()" class="flex-1 px-4 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-sm text-white font-medium transition-colors disabled:opacity-50">
+          {{ profileSaving() ? 'Salvataggio...' : 'Salva' }}
+        </button>
+      </div>
+    </div>
+  </div>
+}
+
+<!-- Add Account Modal (Admin only) -->
+@if (showAddModal()) {
+  <div class="fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" (click)="closeAddModal()"></div>
+    <div class="relative t-card border border-white/10 rounded-2xl p-6 w-full max-w-sm shadow-2xl">
+      <h3 class="text-base font-semibold text-white mb-5">Aggiungi Account</h3>
+      <div class="space-y-3">
+        <input type="text" [(ngModel)]="newUsername" placeholder="Username *"
+          class="w-full t-input border border-white/10 rounded-lg px-3 py-2.5 text-white text-sm placeholder-white/30 focus:outline-none focus:border-blue-500"/>
+        <input type="email" [(ngModel)]="newEmail" placeholder="Email *"
+          class="w-full t-input border border-white/10 rounded-lg px-3 py-2.5 text-white text-sm placeholder-white/30 focus:outline-none focus:border-blue-500"/>
+        <input type="password" [(ngModel)]="newPassword" placeholder="Password *"
+          class="w-full t-input border border-white/10 rounded-lg px-3 py-2.5 text-white text-sm placeholder-white/30 focus:outline-none focus:border-blue-500"/>
+        <label class="flex items-center gap-2 text-sm text-white/70">
+          <input type="checkbox" [(ngModel)]="newIsAdmin" class="rounded border-white/20 bg-white/5 text-blue-500 focus:ring-0"/>
+          Amministratore
+        </label>
+      </div>
+      @if (addError()) {
+        <p class="text-red-400 text-xs mt-3">{{ addError() }}</p>
+      }
+      <div class="flex gap-3 mt-5">
+        <button (click)="closeAddModal()" class="flex-1 px-4 py-2.5 rounded-lg bg-white/5 text-sm text-white/70 hover:text-white transition-colors">Annulla</button>
+        <button (click)="addAccount()" [disabled]="addSaving()" class="flex-1 px-4 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-sm text-white font-medium transition-colors disabled:opacity-50">
+          {{ addSaving() ? 'Creazione...' : 'Crea' }}
+        </button>
+      </div>
+    </div>
+  </div>
+}

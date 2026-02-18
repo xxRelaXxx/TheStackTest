@@ -1,0 +1,70 @@
+/* Global styles */
+@import "tailwindcss";
+
+*, *::before, *::after { box-sizing: border-box; }
+
+/* ─── Theme CSS variables ─────────────────────────────────────────────────── */
+:root {
+  --bg-main:  #0b1120;
+  --bg-card:  #0d1526;
+  --bg-input: #131d35;
+}
+
+html.light {
+  --bg-main:  #f0f4f8;
+  --bg-card:  #ffffff;
+  --bg-input: #edf2f7;
+}
+
+/* Theme helper classes */
+.t-bg    { background-color: var(--bg-main); }
+.t-card  { background-color: var(--bg-card); }
+.t-input { background-color: var(--bg-input); }
+
+/* ─── Light-mode overrides for Tailwind white-text utilities ─────────────── */
+html.light .text-white                { color: #1e293b !important; }
+html.light .text-white\/80            { color: rgba(30,41,59,.80) !important; }
+html.light .text-white\/70            { color: rgba(30,41,59,.70) !important; }
+html.light .text-white\/60            { color: rgba(30,41,59,.60) !important; }
+html.light .text-white\/50            { color: rgba(30,41,59,.50) !important; }
+html.light .text-white\/40            { color: rgba(30,41,59,.40) !important; }
+html.light .text-white\/30            { color: rgba(30,41,59,.30) !important; }
+html.light .text-white\/20            { color: rgba(30,41,59,.20) !important; }
+
+/* ─── Light-mode overrides for white border utilities ────────────────────── */
+html.light .border-white\/5           { border-color: rgba(0,0,0,.07) !important; }
+html.light .border-white\/10          { border-color: rgba(0,0,0,.12) !important; }
+html.light .divide-white\/5  > :not(:last-child) { border-color: rgba(0,0,0,.07) !important; }
+
+/* ─── Light-mode overrides for white bg utilities ────────────────────────── */
+html.light .bg-white\/5               { background-color: rgba(0,0,0,.04) !important; }
+html.light .bg-white\/10              { background-color: rgba(0,0,0,.07) !important; }
+html.light .hover\:bg-white\/5:hover  { background-color: rgba(0,0,0,.04) !important; }
+html.light .hover\:bg-white\/10:hover { background-color: rgba(0,0,0,.07) !important; }
+html.light .hover\:bg-white\/3:hover  { background-color: rgba(0,0,0,.02) !important; }
+
+/* ─── Light-mode: backdrop for modals ───────────────────────────────────── */
+html.light .backdrop-blur-sm { backdrop-filter: blur(4px); }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background-color: var(--bg-main);
+  color: #fff;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  transition: background-color 0.25s;
+}
+
+html.light body { color: #1e293b; }
+
+/* Custom scrollbar */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
+html.light ::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.15); }
+
+/* Select option styling */
+select option { background: var(--bg-input); color: inherit; }
