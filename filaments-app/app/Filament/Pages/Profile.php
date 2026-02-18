@@ -154,10 +154,8 @@ class Profile extends Page implements HasForms
                 ->label('Logout')
                 ->icon('heroicon-o-arrow-right-on-rectangle')
                 ->color('danger')
-                ->action(function () use ($apiService) {
-                    $apiService->logout();
-                    redirect()->route('filament.admin.auth.login');
-                }),
+                ->url(fn () => filament()->getLogoutUrl())
+                ->postToUrl(),
         ];
     }
 

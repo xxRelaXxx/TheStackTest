@@ -17,6 +17,7 @@ use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use App\Http\Middleware\CheckApiToken;
 use App\Filament\Pages\Auth\Login;
+use Filament\Actions\Action;
 use Filament\Navigation\MenuItem;
 
 class AdminPanelProvider extends PanelProvider
@@ -44,8 +45,11 @@ class AdminPanelProvider extends PanelProvider
                     ->label('Account')
                     ->url(fn () => route('filament.admin.pages.profile'))
                     ->icon('heroicon-o-user-circle'),
-                'logout' => MenuItem::make()
-                    ->label('Esci'),
+                'logout' => Action::make('logout')
+                    ->label('Esci')
+                    ->url(fn () => filament()->getLogoutUrl())
+                    ->postToUrl()
+                    ->sort(PHP_INT_MAX),
             ])
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')
