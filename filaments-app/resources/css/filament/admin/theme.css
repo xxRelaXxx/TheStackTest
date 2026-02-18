@@ -1,0 +1,20 @@
+@import '/vendor/filament/filament/resources/css/theme.css';
+
+@config 'tailwind.config.js';
+
+/* Custom styles for CrossDocker theme */
+:root {
+    --primary: 59 130 246;
+    --danger: 239 68 68;
+    --success: 34 197 94;
+    --warning: 251 146 60;
+}
+
+.fi-sidebar-nav {
+    background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+}
+
+.fi-topbar {
+    background: #0f172a;
+    border-bottom: 1px solid #334155;
+}

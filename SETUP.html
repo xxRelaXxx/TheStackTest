@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CrossDocker - Setup</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #1a1d2e;
+            color: #e5e5e5;
+        }
+        h1 {
+            color: #5865f2;
+        }
+        .card {
+            background: #16213e;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border: 1px solid #2a2f45;
+        }
+        .step {
+            margin: 15px 0;
+        }
+        .step-number {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            background: #5865f2;
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 30px;
+            margin-right: 10px;
+            font-weight: bold;
+        }
+        code {
+            background: #0f3460;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+        }
+        .btn {
+            display: inline-block;
+            background: #5865f2;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            margin: 10px 5px;
+            font-weight: 600;
+        }
+        .btn:hover {
+            background: #4752c4;
+        }
+        .success {
+            color: #43b581;
+        }
+        .warning {
+            color: #faa61a;
+        }
+        ul {
+            line-height: 1.8;
+        }
+    </style>
+</head>
+<body>
+    <h1>🚀 CrossDocker - Gestionale Finanziario</h1>
+    <p>Benvenuto nel sistema di gestione finanziaria. Segui questi passi per avviare l'applicazione.</p>
+
+    <div class="card">
+        <h2>📋 Requisiti</h2>
+        <ul>
+            <li><strong class="success">✓ .NET 8 SDK</strong> - Già installato</li>
+            <li><strong class="success">✓ Browser moderno</strong> - Chrome, Firefox, Edge</li>
+        </ul>
+    </div>
+
+    <div class="card">
+        <h2>🛠️ Avvio Rapido</h2>
+        
+        <div class="step">
+            <span class="step-number">1</span>
+            <strong>Avvia il Backend (API)</strong>
+            <p>Esegui il file: <code>start-backend.bat</code></p>
+            <p>Oppure manualmente:</p>
+            <pre><code>cd Finance-api
+dotnet run</code></pre>
+            <p class="success">✓ L'API sarà disponibile su https://localhost:7241</p>
+        </div>
+
+        <div class="step">
+            <span class="step-number">2</span>
+            <strong>Apri il Frontend</strong>
+            <p>Apri il file: <code>frontend/index.html</code></p>
+            <p class="warning">⚠️ Usa un web server locale (non aprire direttamente il file)</p>
+            <p><strong>Opzioni:</strong></p>
+            <ul>
+                <li><strong>VS Code:</strong> Installa "Live Server", click destro su index.html → Open with Live Server</li>
+                <li><strong>Python:</strong> <code>cd frontend; python -m http.server 8000</code></li>
+                <li><strong>Node.js:</strong> <code>npx http-server frontend -p 8000</code></li>
+            </ul>
+        </div>
+
+        <div class="step">
+            <span class="step-number">3</span>
+            <strong>Accedi all'Applicazione</strong>
+            <p>Credenziali predefinite:</p>
+            <ul>
+                <li><strong>Email:</strong> <code>admin@gmail.com</code></li>
+                <li><strong>Password:</strong> <code>admin123</code></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>📱 Funzionalità Disponibili</h2>
+        <ul>
+            <li>✅ Dashboard con statistiche finanziarie</li>
+            <li>✅ Gestione fatture (Entrate/Uscite)</li>
+            <li>✅ Inserimento e cancellazione fatture</li>
+            <li>✅ Filtri per Cliente e Argomento</li>
+            <li>✅ Gestione account utenti</li>
+            <li>✅ Tema chiaro/scuro</li>
+            <li>✅ Design responsive (Web & Mobile)</li>
+        </ul>
+    </div>
+
+    <div class="card">
+        <h2>🔗 Link Utili</h2>
+        <a href="https://localhost:7241/swagger" class="btn" target="_blank">📚 API Documentation (Swagger)</a>
+        <a href="frontend/index.html" class="btn" target="_blank">🌐 Apri Frontend</a>
+        <a href="README.md" class="btn" target="_blank">📖 Documentazione Completa</a>
+    </div>
+
+    <div class="card">
+        <h2>❓ Problemi Comuni</h2>
+        <ul>
+            <li><strong>API non raggiungibile:</strong> Verifica che <code>start-backend.bat</code> sia in esecuzione</li>
+            <li><strong>Errore CORS:</strong> Usa un web server locale per il frontend (non file://)</li>
+            <li><strong>Database vuoto:</strong> Elimina <code>finance.db</code> e riavvia l'API</li>
+        </ul>
+    </div>
+
+    <div class="card" style="background: linear-gradient(135deg, #5865f2 0%, #4752c4 100%); border: none;">
+        <h2 style="color: white;">🎉 Tutto Pronto!</h2>
+        <p style="color: white;">Il sistema è configurato e pronto all'uso. Buon lavoro!</p>
+    </div>
+
+    <script>
+        // Check if API is running
+        fetch('https://localhost:7241/api/auth/me')
+            .then(response => {
+                if (response.status === 401) {
+                    document.querySelector('.card:first-of-type').innerHTML += 
+                        '<p class="success" style="margin-top: 15px;">✓ Backend API attivo e funzionante!</p>';
+                }
+            })
+            .catch(() => {
+                document.querySelector('.card:first-of-type').innerHTML += 
+                    '<p class="warning" style="margin-top: 15px;">⚠️ Backend API non raggiungibile. Avvia start-backend.bat</p>';
+            });
+    </script>
+</body>
+</html>
